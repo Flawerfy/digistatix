@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DIGISTATIX | Developed by ULFIANI</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --glass: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --neon-blue: #00f2fe;
+        --neon-purple: #818cf8;
+        --bg-dark: #020617;
+        --success: #4ade80;
+      }
+
+      body {
+        background: var(--bg-dark);
+        color: #f1f5f9;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-image:
+          radial-gradient(
+            circle at 10% 20%,
+            rgba(0, 242, 254, 0.08) 0%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(129, 140, 248, 0.08) 0%,
+            transparent 40%
+          );
+        padding-bottom: 50px;
+      }
+
+      /* NAVBAR */
+      .statix-nav {
+        background: rgba(2, 6, 23, 0.9);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid var(--neon-blue);
+        padding: 12px 0;
+      }
+      .author-brand {
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        color: var(--neon-blue);
+        font-weight: 800;
+      }
+
+      .xp-pill {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50px;
+        padding: 5px 20px;
+        border: 1px solid var(--glass-border);
+      }
+
+      .glass-card {
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 28px;
+        padding: 25px;
+        margin-bottom: 25px;
+      }
+
+      /* ENSIKLOPEDIA */
+      .term-box {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 15px;
+        padding: 15px;
+        border-left: 4px solid var(--neon-blue);
+        height: 100%;
+        transition: 0.3s;
+      }
+      .term-box:hover {
+        background: rgba(0, 242, 254, 0.05);
+        transform: translateY(-5px);
+      }
+
+      /* MOOD */
+      .mood-item {
+        cursor: pointer;
+        transition: 0.3s;
+        padding: 15px;
+        border-radius: 20px;
+        border: 1px solid transparent;
+      }
+      .mood-item:hover {
+        background: rgba(0, 242, 254, 0.1);
+        border-color: var(--neon-blue);
+      }
+
+      /* QUIZ */
+      .quiz-card {
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid var(--glass-border);
+        height: 100%;
+      }
+      .btn-choice {
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        color: white;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 10px;
+        padding: 12px;
+        border-radius: 12px;
+        transition: 0.2s;
+      }
+      .btn-choice:hover {
+        border-color: var(--neon-blue);
+        background: rgba(0, 242, 254, 0.1);
+      }
+      .correct {
+        background: rgba(74, 222, 128, 0.15) !important;
+        border-color: var(--success) !important;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      .sync-text {
+        animation: pulse 2s infinite;
+        color: var(--neon-blue);
+        font-size: 0.7rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="statix-nav fixed-top">
+      <div class="container d-flex justify-content-between align-items-center">
+        <div>
+          <div class="fw-bold fs-4">
+            <i class="fa-solid fa-chart-pie text-info"></i> DIGISTATIX
+          </div>
+          <div class="author-brand text-uppercase">Developed by ULFIANI</div>
+        </div>
+        <div class="xp-pill d-flex align-items-center gap-3">
+          <div
+            style="
+              width: 100px;
+              height: 6px;
+              background: #1e293b;
+              border-radius: 10px;
+            "
+            class="d-none d-md-block"
+          >
+            <div
+              id="xp-bar"
+              style="
+                width: 0%;
+                height: 100%;
+                background: var(--neon-blue);
+                border-radius: 10px;
+                transition: 0.5s;
+              "
+            ></div>
+          </div>
+          <div class="fw-bold text-info" id="xp-txt">0 XP</div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="margin-top: 110px">
+      <div class="glass-card text-center">
+        <div class="sync-text mb-2 text-uppercase">Neural Link Ready...</div>
+        <h5 class="mb-4 text-uppercase fw-bold">
+          Pilih Status Energimu Hari Ini:
+        </h5>
+        <div class="row g-3 justify-content-center">
+          <div
+            class="col-4 col-md-3"
+            onclick="
+              start(20, 'ROKET AKTIF! Belajar statistika jadi lebih seru!')
+            "
+          >
+            <div class="mood-item">
+              <h1>🚀</h1>
+              <small>Super Semangat</small>
+            </div>
+          </div>
+          <div
+            class="col-4 col-md-3"
+            onclick="start(15, 'MODE FOKUS. Konsentrasi penuh ke layar!')"
+          >
+            <div class="mood-item">
+              <h1>🎯</h1>
+              <small>Fokus</small>
+            </div>
+          </div>
+          <div
+            class="col-4 col-md-3"
+            onclick="start(10, 'MODE SANTAI. Mari pelajari data pelan-pelan.')"
+          >
+            <div class="mood-item">
+              <h1>🌊</h1>
+              <small>Santai</small>
+            </div>
+          </div>
+        </div>
+        <p id="start-msg" class="mt-4 text-info fw-bold"></p>
+      </div>
+
+      <div class="glass-card">
+        <h5 class="text-warning mb-4 text-uppercase fw-bold">
+          <i class="fa-solid fa-book me-2"></i> Ensiklopedia Statistik
+        </h5>
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-4">
+            <div class="term-box">
+              <h6 class="text-info">Diagram Batang</h6>
+              <p class="small text-secondary">
+                Visualisasi data menggunakan batang tegak. Cocok untuk
+                <b>membandingkan jumlah</b> antar kategori secara visual.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="term-box" style="border-left-color: var(--neon-purple)">
+              <h6 class="text-info">Diagram Lingkaran</h6>
+              <p class="small text-secondary">
+                Data dalam bentuk lingkaran (juring). Digunakan untuk melihat
+                <b>proporsi atau persentase</b> dari total data.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="term-box" style="border-left-color: var(--success)">
+              <h6 class="text-info">Mean (Rata-rata)</h6>
+              <p class="small text-secondary">
+                Nilai rata-rata dari seluruh data. Dicari dengan cara:
+                <b>Jumlah seluruh nilai ÷ Banyak data</b>.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="term-box" style="border-left-color: #fbbf24">
+              <h6 class="text-info">Modus</h6>
+              <p class="small text-secondary">
+                Data yang <b>paling sering muncul</b> atau memiliki frekuensi
+                tertinggi dalam suatu kumpulan data.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="term-box" style="border-left-color: #f87171">
+              <h6 class="text-info">Median</h6>
+              <p class="small text-secondary">
+                Nilai <b>tengah</b> dari sekumpulan data yang telah diurutkan
+                dari yang terkecil sampai terbesar.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="term-box" style="border-left-color: #a855f7">
+              <h6 class="text-info">Frekuensi</h6>
+              <p class="small text-secondary">
+                Bilangan yang menunjukkan <b>seberapa sering</b> suatu data atau
+                peristiwa terjadi.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+          <div class="glass-card h-100">
+            <h5 class="text-info mb-4">
+              <i class="fa-solid fa-sliders me-2"></i> Simulator Eskul
+            </h5>
+            <div class="mb-4">
+              <label class="small text-secondary d-flex justify-content-between"
+                >Pramuka <span id="v1">20</span></label
+              >
+              <input
+                type="range"
+                class="form-range"
+                id="s1"
+                value="20"
+                oninput="update()"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="small text-secondary d-flex justify-content-between"
+                >Futsal <span id="v2">45</span></label
+              >
+              <input
+                type="range"
+                class="form-range"
+                id="s2"
+                value="45"
+                oninput="update()"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="small text-secondary d-flex justify-content-between"
+                >Basket <span id="v3">30</span></label
+              >
+              <input
+                type="range"
+                class="form-range"
+                id="s3"
+                value="30"
+                oninput="update()"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="small text-secondary d-flex justify-content-between"
+                >Musik <span id="v4">25</span></label
+              >
+              <input
+                type="range"
+                class="form-range"
+                id="s4"
+                value="25"
+                oninput="update()"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="small text-secondary d-flex justify-content-between"
+                >Robotik <span id="v5">15</span></label
+              >
+              <input
+                type="range"
+                class="form-range"
+                id="s5"
+                value="15"
+                oninput="update()"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="glass-card h-100 text-center">
+            <div class="row mb-4">
+              <div class="col-4">
+                <small class="text-secondary d-block">TOTAL SISWA</small>
+                <span class="h4 fw-bold text-info" id="tot-val">0</span>
+              </div>
+              <div class="col-4">
+                <small class="text-secondary d-block">RATA-RATA</small>
+                <span class="h4 fw-bold text-info" id="avg-val">0</span>
+              </div>
+              <div class="col-4">
+                <small class="text-secondary d-block">MODUS</small>
+                <span class="h4 fw-bold text-warning" id="mod-val">-</span>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center gap-2 mb-3">
+              <button
+                id="btn-bar"
+                class="btn btn-sm btn-outline-info active"
+                onclick="changeChart('bar')"
+              >
+                Diagram Batang
+              </button>
+              <button
+                id="btn-pie"
+                class="btn btn-sm btn-outline-info"
+                onclick="changeChart('pie')"
+              >
+                Diagram Lingkaran
+              </button>
+            </div>
+            <div style="height: 300px"><canvas id="labChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <h4 class="text-center mb-4 fw-bold text-info text-uppercase">
+        Mission Quest: Detektif Data
+      </h4>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="quiz-card">
+            <small class="text-warning fw-bold">QUEST 1</small>
+            <p class="small">
+              Data yang muncul paling sering atau memiliki jumlah terbanyak
+              dalam statistik disebut...
+            </p>
+            <button class="btn-choice" onclick="check(1, 'benar', this)">
+              Modus
+            </button>
+            <button class="btn-choice" onclick="check(1, 'salah', this)">
+              Mean
+            </button>
+            <div id="fb1" class="small mt-2"></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="quiz-card">
+            <small class="text-warning fw-bold">QUEST 2</small>
+            <p class="small">
+              Diagram manakah yang paling tepat untuk membandingkan jumlah
+              pengikut antar 5 Eskul secara langsung?
+            </p>
+            <button class="btn-choice" onclick="check(2, 'benar', this)">
+              Diagram Batang
+            </button>
+            <button class="btn-choice" onclick="check(2, 'salah', this)">
+              Diagram Lingkaran
+            </button>
+            <div id="fb2" class="small mt-2"></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="quiz-card">
+            <small class="text-warning fw-bold">QUEST 3</small>
+            <p class="small">
+              Jika total siswa adalah 120 dan ada 5 kategori eskul, berapakah
+              rata-rata (Mean) siswa per eskul?
+            </p>
+            <button class="btn-choice" onclick="check(3, 'salah', this)">
+              20 Siswa
+            </button>
+            <button class="btn-choice" onclick="check(3, 'benar', this)">
+              24 Siswa
+            </button>
+            <div id="fb3" class="small mt-2"></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="quiz-card">
+            <small class="text-warning fw-bold">QUEST 4</small>
+            <p class="small">
+              Urutan data: 10, 20, 30, 40, 50. Manakah yang merupakan nilai
+              <b>Median</b>?
+            </p>
+            <button class="btn-choice" onclick="check(4, 'benar', this)">
+              30
+            </button>
+            <button class="btn-choice" onclick="check(4, 'salah', this)">
+              20
+            </button>
+            <div id="fb4" class="small mt-2"></div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="quiz-card">
+            <small class="text-warning fw-bold">QUEST 5</small>
+            <p class="small">
+              Dalam diagram lingkaran, jika sebuah kategori memiliki porsi
+              setengah lingkaran, berapa persentase datanya?
+            </p>
+            <button class="btn-choice" onclick="check(5, 'benar', this)">
+              50%
+            </button>
+            <button class="btn-choice" onclick="check(5, 'salah', this)">
+              25%
+            </button>
+            <div id="fb5" class="small mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let chart;
+      let xp = 0;
+      const labs = ["Pramuka", "Futsal", "Basket", "Musik", "Robotik"];
+      const clrs = ["#00f2fe", "#818cf8", "#f093fb", "#4ade80", "#fbbf24"];
+
+      function init() {
+        const el = document.getElementById("labChart").getContext("2d");
+        chart = new Chart(el, {
+          type: "bar",
+          data: {
+            labels: labs,
+            datasets: [
+              {
+                data: [20, 45, 30, 25, 15],
+                backgroundColor: clrs,
+                borderRadius: 12,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { ticks: { color: "#94a3b8" } },
+              x: { ticks: { color: "#94a3b8" } },
+            },
+          },
+        });
+        update();
+      }
+
+      function update() {
+        let vals = [];
+        for (let i = 1; i <= 5; i++) {
+          let v = parseInt(document.getElementById("s" + i).value);
+          document.getElementById("v" + i).innerText = v;
+          vals.push(v);
+        }
+        chart.data.datasets[0].data = vals;
+        chart.update();
+
+        const sum = vals.reduce((a, b) => a + b, 0);
+        const mean = sum / vals.length;
+        let max = Math.max(...vals);
+        let mod = labs[vals.indexOf(max)];
+
+        document.getElementById("tot-val").innerText = sum;
+        document.getElementById("avg-val").innerText = mean.toFixed(1);
+        document.getElementById("mod-val").innerText = mod;
+      }
+
+      function changeChart(type) {
+        chart.config.type = type;
+        document
+          .getElementById("btn-bar")
+          .classList.toggle("active", type === "bar");
+        document
+          .getElementById("btn-pie")
+          .classList.toggle("active", type === "pie");
+        chart.config.options.plugins.legend.display = type === "pie";
+        chart.update();
+      }
+
+      function start(val, msg) {
+        document.getElementById("start-msg").innerText = msg;
+        addXp(val);
+      }
+
+      function check(q, status, btn) {
+        const f = document.getElementById("fb" + q);
+        if (status === "benar") {
+          f.innerHTML =
+            "<span class='text-success fw-bold'>✅ Tepat! +20 XP ditambahkan.</span>";
+          btn.classList.add("correct");
+          addXp(20);
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.8 } });
+        } else {
+          f.innerHTML =
+            "<span class='text-danger'>❌ Kurang tepat, ayo baca ensiklopedia di atas!</span>";
+        }
+      }
+
+      function addXp(v) {
+        xp += v;
+        if (xp > 100) xp = 100;
+        document.getElementById("xp-txt").innerText = xp + " XP";
+        document.getElementById("xp-bar").style.width = xp + "%";
+      }
+
+      window.onload = init;
+    </script>
+  </body>
+</html>
