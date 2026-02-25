@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DIGISTATIX | Developed by ULFIANI</title>
 
-    <!-- Library Eksternal -->
+    <!-- Pustaka Eksternal -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link
@@ -21,6 +21,31 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
 
+    <!-- Konfigurasi MathJax -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+          processEscapes: true,
+        },
+        options: {
+          enableMenu: false,
+        },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
     <style>
       :root {
         --glass: rgba(255, 255, 255, 0.03);
@@ -32,6 +57,13 @@
         --success: #10b981;
         --danger: #ef4444;
         --warning: #facc15;
+
+        /* Warna Identitas Eskul */
+        --color-pramuka: #8b4513; /* Saddle Brown */
+        --color-futsal: #ef4444; /* Red */
+        --color-basket: #f97316; /* Orange */
+        --color-musik: #a855f7; /* Purple */
+        --color-teater: #facc15; /* Gold/Yellow */
       }
 
       body {
@@ -40,13 +72,13 @@
         font-family: "Plus Jakarta Sans", sans-serif;
         background-image:
           radial-gradient(
-            circle at 5% 5%,
-            rgba(244, 114, 182, 0.1) 0%,
+            circle at 10% 20%,
+            rgba(244, 114, 182, 0.08) 0%,
             transparent 40%
           ),
           radial-gradient(
-            circle at 95% 95%,
-            rgba(99, 102, 241, 0.1) 0%,
+            circle at 90% 80%,
+            rgba(99, 102, 241, 0.08) 0%,
             transparent 40%
           );
         padding-bottom: 50px;
@@ -55,10 +87,10 @@
 
       /* Navigasi */
       .statix-nav {
-        background: rgba(2, 6, 23, 0.9);
+        background: rgba(2, 6, 23, 0.95);
         backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--neon-pink);
-        padding: 12px 0;
+        padding: 15px 0;
         z-index: 1000;
       }
       .author-brand {
@@ -84,6 +116,10 @@
         border-radius: 20px;
         padding: 25px;
         margin-bottom: 30px;
+        transition: transform 0.3s ease;
+      }
+      .glass-card:hover {
+        border-color: rgba(255, 255, 255, 0.2);
       }
       .section-title {
         font-weight: 800;
@@ -106,10 +142,13 @@
         transform: translateY(-5px);
         border-left-color: var(--neon-pink);
       }
+      .term-box b {
+        color: var(--neon-cyan);
+      }
 
       /* Angka Statistik */
       .stat-value {
-        font-size: 2.4rem;
+        font-size: 2.2rem;
         font-weight: 800;
         background: linear-gradient(to bottom right, #fff, var(--neon-indigo));
         -webkit-background-clip: text;
@@ -132,7 +171,7 @@
         transform: scale(1.05);
       }
 
-      /* Buttons & Choices */
+      /* Tombol & Pilihan */
       .btn-mode {
         border-radius: 30px;
         font-weight: 700;
@@ -172,9 +211,28 @@
       .wrong {
         background: rgba(239, 68, 68, 0.2) !important;
         border-color: var(--danger) !important;
+        color: white !important;
       }
 
-      /* Essay Area */
+      .explanation-box {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 12px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        display: none;
+        border-left: 3px solid var(--neon-cyan);
+        color: #cbd5e1;
+      }
+
+      .instruction-box {
+        background: rgba(34, 211, 238, 0.05);
+        border: 1px dashed var(--neon-cyan);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+
       .essay-area {
         background: rgba(15, 23, 42, 0.4);
         border: 1px solid var(--glass-border);
@@ -185,30 +243,32 @@
         resize: none;
       }
 
-      /* Box Instruksi Khusus */
-      .instruction-box {
-        background: rgba(34, 211, 238, 0.05);
-        border: 1px dashed var(--neon-cyan);
-        border-radius: 15px;
-        padding: 15px;
-        margin-bottom: 20px;
-      }
-
       .study-guide-box {
         border-radius: 20px;
         background: linear-gradient(
           135deg,
-          rgba(99, 102, 241, 0.05),
-          rgba(244, 114, 182, 0.05)
+          rgba(99, 102, 241, 0.08),
+          rgba(244, 114, 182, 0.08)
         );
         border: 1px solid var(--glass-border);
         padding: 30px;
+        margin-top: 40px;
+      }
+
+      /* Responsive Canvas Adjustments */
+      canvas {
+        max-width: 100% !important;
+      }
+
+      mjx-container {
+        color: white !important;
+        font-size: 1.1em !important;
       }
     </style>
   </head>
 
   <body>
-    <!-- Navigasi -->
+    <!-- Navigasi Utama -->
     <nav class="statix-nav fixed-top">
       <div class="container d-flex justify-content-between align-items-center">
         <div>
@@ -251,13 +311,15 @@
     </nav>
 
     <div class="container" style="margin-top: 120px">
-      <!-- Ice Breaking -->
+      <!-- Ice Breaking Section -->
       <div class="glass-card text-center">
         <h5 class="section-title">Inisialisasi Mood Belajar</h5>
         <div class="row g-3 justify-content-center">
           <div
             class="col-4 col-md-3"
-            onclick="start(25, 'COSMIC ENERGY! Mari jelajahi galaksi data!')"
+            onclick="
+              start(25, 'ENERGI TERKUMPUL! Mari taklukkan statistik hari ini!')
+            "
           >
             <div class="mood-item">
               <h1>🎇</h1>
@@ -266,7 +328,9 @@
           </div>
           <div
             class="col-4 col-md-3"
-            onclick="start(20, 'FOCUS STABLE. Kamu siap menerima data baru!')"
+            onclick="
+              start(20, 'FOKUS STABLE. Pikiranmu sangat tajam sekarang.')
+            "
           >
             <div class="mood-item">
               <h1>🧿</h1>
@@ -275,7 +339,7 @@
           </div>
           <div
             class="col-4 col-md-3"
-            onclick="start(15, 'NEBULA FLOW. Belajar dengan tenang dan pasti.')"
+            onclick="start(15, 'ALUR TENANG. Nikmati setiap proses belajarmu.')"
           >
             <div class="mood-item">
               <h1>🌙</h1>
@@ -290,7 +354,7 @@
         ></p>
       </div>
 
-      <!-- Ensiklopedia -->
+      <!-- Pusat Informasi Data Section -->
       <div class="glass-card">
         <h5 class="section-title" style="color: var(--neon-cyan)">
           <i class="fa-solid fa-brain me-2"></i> Pusat Informasi Data
@@ -300,8 +364,9 @@
             <div class="term-box">
               <h6 style="color: var(--neon-pink)">Diagram Batang</h6>
               <p class="small text-secondary">
-                Visualisasi perbandingan jumlah antar kategori melalui tinggi
-                batang.
+                Grafik yang membandingkan data menggunakan batang tegak. Sumbu
+                mendatar menunjukkan kategori, dan sumbu tegak menunjukkan
+                jumlahnya.
               </p>
             </div>
           </div>
@@ -309,8 +374,9 @@
             <div class="term-box" style="border-left-color: var(--neon-cyan)">
               <h6 style="color: var(--neon-cyan)">Diagram Lingkaran</h6>
               <p class="small text-secondary">
-                Melihat pembagian bagian dari keseluruhan data dalam bentuk
-                juring.
+                Grafik berbentuk lingkaran yang dibagi menjadi beberapa juring.
+                Luas tiap juring menunjukkan persentase atau bagian data
+                terhadap total.
               </p>
             </div>
           </div>
@@ -318,8 +384,9 @@
             <div class="term-box">
               <h6 style="color: var(--neon-indigo)">Mean (Rata-rata)</h6>
               <p class="small text-secondary">
-                Nilai perwakilan yang didapat dari total nilai dibagi banyak
-                data.
+                Nilai rata-rata dari seluruh data kelompok. Dihitung dengan
+                rumus: $\bar{x} = \frac{\text{Jumlah Nilai}}{\text{Banyak
+                Data}}$.
               </p>
             </div>
           </div>
@@ -327,7 +394,8 @@
             <div class="term-box">
               <h6 style="color: var(--neon-indigo)">Modus</h6>
               <p class="small text-secondary">
-                Data yang memiliki <b>frekuensi kemunculan terbanyak</b>.
+                Nilai atau kategori data yang memiliki frekuensi tertinggi atau
+                yang paling sering muncul dalam kelompok.
               </p>
             </div>
           </div>
@@ -335,7 +403,9 @@
             <div class="term-box" style="border-left-color: var(--neon-pink)">
               <h6 style="color: var(--neon-pink)">Median</h6>
               <p class="small text-secondary">
-                Nilai <b>paling tengah</b> setelah data disusun berurutan.
+                Nilai tengah dari sekumpulan data yang sudah diurutkan dari
+                terkecil ke terbesar. Median membagi data menjadi dua bagian
+                sama besar.
               </p>
             </div>
           </div>
@@ -343,36 +413,38 @@
             <div class="term-box" style="border-left-color: var(--neon-cyan)">
               <h6 style="color: var(--neon-cyan)">Frekuensi</h6>
               <p class="small text-secondary">
-                Angka yang menunjukkan berapa kali suatu data terjadi.
+                Angka yang menunjukkan seberapa sering suatu data atau kategori
+                muncul dalam sebuah pengamatan.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Simulator dengan Instruksi Jelas -->
+      <!-- Simulator Section -->
       <div class="row g-4 mb-4">
         <div class="col-lg-4">
           <div class="glass-card h-100">
             <h5 class="section-title" style="color: var(--neon-pink)">
-              Input Simulator
+              Simulator Interaktif
             </h5>
 
-            <!-- BOX INSTRUKSI UNTUK SISWA -->
             <div class="instruction-box">
               <p class="small mb-0" style="color: var(--neon-cyan)">
-                <i class="fa-solid fa-circle-info me-1"></i> <b>Cara Bermain:</b
-                ><br />
-                Geser tombol (slider) di bawah untuk menambah/mengurangi jumlah
-                siswa setiap eskul. Perhatikan bagaimana grafik dan angka
-                statistik di samping berubah secara otomatis!
+                <i class="fa-solid fa-hand-pointer me-1"></i>
+                <b>Langkah Bermain:</b><br />
+                Geser slider setiap Eskul di bawah sesuai jumlah peminat yang
+                kamu bayangkan. Perhatikan grafik di samping ikut berubah!
               </p>
             </div>
 
             <div class="mb-3">
               <label class="small d-flex justify-content-between"
                 >Pramuka
-                <span id="v1" class="fw-bold" style="color: var(--neon-cyan)"
+                <span
+                  id="v1"
+                  class="fw-bold"
+                  style="color: var(--color-pramuka)"
                   >20</span
                 ></label
               >
@@ -387,7 +459,7 @@
             <div class="mb-3">
               <label class="small d-flex justify-content-between"
                 >Futsal
-                <span id="v2" class="fw-bold" style="color: var(--neon-cyan)"
+                <span id="v2" class="fw-bold" style="color: var(--color-futsal)"
                   >45</span
                 ></label
               >
@@ -402,7 +474,7 @@
             <div class="mb-3">
               <label class="small d-flex justify-content-between"
                 >Basket
-                <span id="v3" class="fw-bold" style="color: var(--neon-cyan)"
+                <span id="v3" class="fw-bold" style="color: var(--color-basket)"
                   >30</span
                 ></label
               >
@@ -417,7 +489,7 @@
             <div class="mb-3">
               <label class="small d-flex justify-content-between"
                 >Musik
-                <span id="v4" class="fw-bold" style="color: var(--neon-cyan)"
+                <span id="v4" class="fw-bold" style="color: var(--color-musik)"
                   >25</span
                 ></label
               >
@@ -431,8 +503,8 @@
             </div>
             <div class="mb-3">
               <label class="small d-flex justify-content-between"
-                >Robotik
-                <span id="v5" class="fw-bold" style="color: var(--neon-cyan)"
+                >Teater
+                <span id="v5" class="fw-bold" style="color: var(--color-teater)"
                   >15</span
                 ></label
               >
@@ -449,16 +521,16 @@
         <div class="col-lg-8">
           <div class="glass-card h-100 text-center">
             <div class="row g-3 mb-5">
-              <div class="col-4">
+              <div class="col-4 text-center">
                 <small class="text-secondary d-block">TOTAL SISWA</small>
                 <div class="stat-value" id="tot-val">0</div>
               </div>
-              <div class="col-4">
-                <small class="text-secondary d-block">MEAN (RATA-RATA)</small>
+              <div class="col-4 text-center">
+                <small class="text-secondary d-block">MEAN ($\bar{x}$)</small>
                 <div class="stat-value" id="avg-val">0</div>
               </div>
-              <div class="col-4">
-                <small class="text-secondary d-block">MODUS (TERBANYAK)</small>
+              <div class="col-4 text-center">
+                <small class="text-secondary d-block">MODUS</small>
                 <div class="stat-value" id="mod-val" style="font-size: 1.1rem">
                   -
                 </div>
@@ -470,14 +542,14 @@
                 class="btn-mode active"
                 onclick="changeChart('bar')"
               >
-                Bar View
+                Grafik Batang
               </button>
               <button
                 id="btn-pie"
                 class="btn-mode"
                 onclick="changeChart('pie')"
               >
-                Pie View
+                Grafik Lingkaran
               </button>
             </div>
             <div style="height: 250px"><canvas id="labChart"></canvas></div>
@@ -485,23 +557,22 @@
         </div>
       </div>
 
-      <!-- 6 NOMOR QUEST DENGAN 4 PILIHAN -->
+      <!-- Latihan Soal Pemahaman Section -->
       <h4
         class="section-title text-center"
         style="color: var(--neon-indigo); font-size: 1.5rem"
       >
-        Mission: Cyber Data Master
+        Latihan Soal Pemahaman
       </h4>
       <div class="row g-4 mb-5">
-        <!-- Quest 01 -->
+        <!-- Soal 01 -->
         <div class="col-md-6 col-lg-4">
           <div class="glass-card h-100">
             <span class="badge mb-3" style="background: var(--neon-pink)"
-              >QUEST 01</span
+              >SOAL 01</span
             >
             <p class="small">
-              Data atau kategori yang muncul paling sering dalam sebuah kelompok
-              disebut...
+              Kategori data yang jumlah pemilihnya paling tinggi disebut...
             </p>
             <button class="btn-choice" onclick="check(1, 'benar', this)">
               A. Modus
@@ -513,48 +584,55 @@
               C. Mean
             </button>
             <button class="btn-choice" onclick="check(1, 'salah', this)">
-              D. Frekuensi
+              D. Range
             </button>
             <div id="fb1" class="small mt-2"></div>
+            <div id="exp1" class="explanation-box">
+              <b>Analisis:</b> Modus adalah nilai yang paling sering muncul atau
+              memiliki frekuensi terbanyak dalam suatu kelompok data.
+            </div>
           </div>
         </div>
-        <!-- Quest 02 -->
+        <!-- Soal 02 -->
         <div class="col-md-6 col-lg-4">
           <div class="glass-card h-100">
             <span class="badge mb-3" style="background: var(--neon-indigo)"
-              >QUEST 02</span
+              >SOAL 02</span
             >
             <p class="small">
-              Dalam satu lingkaran penuh (360°), bagian yang mewakili 25% data
-              memiliki sudut sebesar...
+              Jika satu lingkaran ($360^{\circ}$) mewakili $100\%$ data, sudut
+              untuk data $25\%$ adalah...
             </p>
             <button class="btn-choice" onclick="check(2, 'salah', this)">
-              A. 45 Derajat
+              A. $45^{\circ}$
             </button>
             <button class="btn-choice" onclick="check(2, 'benar', this)">
-              B. 90 Derajat
+              B. $90^{\circ}$
             </button>
             <button class="btn-choice" onclick="check(2, 'salah', this)">
-              C. 180 Derajat
+              C. $180^{\circ}$
             </button>
             <button class="btn-choice" onclick="check(2, 'salah', this)">
-              D. 25 Derajat
+              D. $270^{\circ}$
             </button>
             <div id="fb2" class="small mt-2"></div>
+            <div id="exp2" class="explanation-box">
+              <b>Analisis:</b> $25\%$ adalah $\frac{1}{4}$ bagian dari
+              lingkaran. Maka $\frac{1}{4} \times 360^{\circ} = 90^{\circ}$.
+            </div>
           </div>
         </div>
-        <!-- Quest 03 -->
+        <!-- Soal 03 -->
         <div class="col-md-6 col-lg-4">
           <div class="glass-card h-100">
             <span class="badge mb-3" style="background: var(--neon-cyan)"
-              >QUEST 03</span
+              >SOAL 03</span
             >
             <p class="small">
-              Diberikan data nilai: 70, 80, 90. Berapakah nilai rata-rata (Mean)
-              dari data tersebut?
+              Rata-rata (Mean) dari data nilai ujian: $70, 80, 90$ adalah...
             </p>
             <button class="btn-choice" onclick="check(3, 'salah', this)">
-              A. 70
+              A. 75
             </button>
             <button class="btn-choice" onclick="check(3, 'benar', this)">
               B. 80
@@ -566,17 +644,21 @@
               D. 90
             </button>
             <div id="fb3" class="small mt-2"></div>
+            <div id="exp3" class="explanation-box">
+              <b>Analisis:</b> Jumlahkan seluruh nilai $(70+80+90 = 240)$ lalu
+              bagi dengan jumlah data $(3)$. $240 \div 3 = 80$.
+            </div>
           </div>
         </div>
-        <!-- Quest 04 -->
+        <!-- Soal 04 -->
         <div class="col-md-6 col-lg-4">
           <div class="glass-card h-100">
             <span class="badge mb-3" style="background: var(--neon-pink)"
-              >QUEST 04</span
+              >SOAL 04</span
             >
             <p class="small">
-              Visualisasi yang paling tepat untuk membandingkan jumlah frekuensi
-              antar eskul secara langsung adalah...
+              Diagram yang paling tepat untuk membandingkan jumlah kuantitas
+              secara visual adalah...
             </p>
             <button class="btn-choice" onclick="check(4, 'salah', this)">
               A. Diagram Garis
@@ -588,45 +670,54 @@
               C. Diagram Daun
             </button>
             <button class="btn-choice" onclick="check(4, 'salah', this)">
-              D. Tabel Mentah
+              D. Piktogram
             </button>
             <div id="fb4" class="small mt-2"></div>
+            <div id="exp4" class="explanation-box">
+              <b>Analisis:</b> Batang dengan ketinggian berbeda memudahkan kita
+              membedakan jumlah antar kategori secara cepat dan jelas.
+            </div>
           </div>
         </div>
-        <!-- Quest 05 -->
+        <!-- Soal 05 -->
         <div class="col-md-6 col-lg-4">
           <div class="glass-card h-100">
             <span class="badge mb-3" style="background: var(--neon-indigo)"
-              >QUEST 05</span
+              >SOAL 05</span
             >
             <p class="small">
-              Langkah utama yang wajib dilakukan sebelum menentukan nilai Median
+              Langkah yang wajib dilakukan pertama kali sebelum mencari Median
               adalah...
             </p>
             <button class="btn-choice" onclick="check(5, 'benar', this)">
-              A. Mengurutkan data (Kecil ke Besar)
+              A. Mengurutkan data
             </button>
             <button class="btn-choice" onclick="check(5, 'salah', this)">
-              B. Menjumlahkan seluruh data
+              B. Menjumlahkan data
             </button>
             <button class="btn-choice" onclick="check(5, 'salah', this)">
-              C. Mencari modus data
+              C. Mencari rata-rata
             </button>
             <button class="btn-choice" onclick="check(5, 'salah', this)">
-              D. Membagi data menjadi 4 bagian
+              D. Membagi total data
             </button>
             <div id="fb5" class="small mt-2"></div>
+            <div id="exp5" class="explanation-box">
+              <b>Analisis:</b> Median adalah nilai urutan tengah, jadi data
+              harus diurutkan dari terkecil ke terbesar agar posisi tengahnya
+              akurat.
+            </div>
           </div>
         </div>
-        <!-- Quest 06 -->
+        <!-- Soal 06 -->
         <div class="col-md-6 col-lg-4">
           <div class="glass-card h-100">
             <span class="badge mb-3" style="background: var(--neon-cyan)"
-              >QUEST 06</span
+              >SOAL 06</span
             >
             <p class="small">
-              Jika total frekuensi dari 5 eskul adalah 50 siswa, berapakah
-              rata-rata (Mean) jumlah siswa per eskul?
+              Jika total siswa ($n$) adalah $50$ dan ada $5$ Eskul, berapa
+              rata-rata siswa per Eskul?
             </p>
             <button class="btn-choice" onclick="check(6, 'salah', this)">
               A. 5 Siswa
@@ -641,68 +732,80 @@
               D. 25 Siswa
             </button>
             <div id="fb6" class="small mt-2"></div>
+            <div id="exp6" class="explanation-box">
+              <b>Analisis:</b> Rata-rata ($\bar{x}$) didapat dari total nilai
+              dibagi jumlah kategori. $50 \div 5 = 10$.
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Essay -->
+      <!-- Section Berpikir Kritis -->
       <div class="glass-card" style="border-top: 3px solid var(--neon-pink)">
         <h5 class="section-title" style="color: var(--neon-pink)">
-          <i class="fa-solid fa-code-merge me-2"></i> Logika Analitik
+          <i class="fa-solid fa-pen-nib me-2"></i> Berpikir Kritis
         </h5>
         <div class="mb-4">
           <p class="small fw-bold">1. Analisis Visual:</p>
           <p class="small text-secondary">
-            Tanpa melihat angka, jika potongan (juring) eskul Musik pada diagram
-            lingkaran terlihat paling lebar, apa kesimpulanmu tentang Modus data
-            tersebut? Jelaskan alasannya!
+            Jika potongan juring Eskul Teater di diagram lingkaran terlihat
+            paling lebar, apa kesimpulanmu tentang Modus data tersebut?
           </p>
           <textarea
             class="essay-area"
             rows="2"
-            placeholder="Tulis analisismu di sini..."
+            placeholder="Tulis pendapatmu..."
           ></textarea>
         </div>
         <div>
-          <p class="small fw-bold">2. Penalaran Rata-rata:</p>
+          <p class="small fw-bold">2. Logika Rata-rata:</p>
           <p class="small text-secondary">
-            Jika guru menyebutkan rata-rata nilai kelas adalah 80, apakah itu
-            berarti tidak ada siswa yang mendapatkan nilai di bawah 50? Berikan
-            argumenmu!
+            Rata-rata nilai kelas adalah $80$. Mungkinkah ada siswa yang
+            mendapat nilai $10$? Jelaskan alasannya!
           </p>
           <textarea
             class="essay-area"
             rows="2"
-            placeholder="Tulis argumenmu di sini..."
+            placeholder="Tulis argumen logismu..."
           ></textarea>
         </div>
       </div>
 
-      <!-- Study Guide -->
+      <!-- Rangkuman Pembelajaran Section -->
       <div class="study-guide-box">
-        <h5 class="section-title" style="color: var(--neon-cyan)">
-          Rangkuman Pembelajaran
+        <h5 class="fw-bold text-uppercase">
+          <i class="fa-solid fa-scroll me-2"></i> Rangkuman Pembelajaran
         </h5>
         <div class="row">
-          <div class="col-md-6">
-            <ul class="small">
+          <div class="col-md-6 small">
+            <ul>
               <li>
                 <b>Diagram Batang:</b> Digunakan untuk membandingkan jumlah
-                secara visual.
+                frekuensi antar kategori secara visual.
               </li>
               <li>
-                <b>Mean:</b> Angka yang mewakili rata-rata keseluruhan kelompok.
+                <b>Diagram Lingkaran:</b> Menunjukkan proporsi atau persentase
+                bagian terhadap keseluruhan populasi data.
+              </li>
+              <li>
+                <b>Mean:</b> Angka representatif yang menunjukkan nilai
+                rata-rata dari seluruh data kelompok.
               </li>
             </ul>
           </div>
-          <div class="col-md-6">
-            <ul class="small">
+          <div class="col-md-6 small">
+            <ul>
               <li>
-                <b>Median:</b> Penyelamat jika data memiliki nilai yang terlalu
-                ekstrem.
+                <b>Median:</b> Titik tengah data yang sangat berguna jika
+                terdapat nilai pencilan (data ekstrem).
               </li>
               <li>
-                <b>Modus:</b> Menunjukkan apa yang paling populer dalam data.
+                <b>Modus:</b> Menunjukkan identitas data yang paling dominan
+                atau sering muncul dalam pengamatan.
+              </li>
+              <li>
+                <b>Urutan:</b> Ingat, selalu urutkan data dari terkecil ke
+                terbesar sebelum menentukan nilai Median!
               </li>
             </ul>
           </div>
@@ -713,8 +816,10 @@
     <script>
       let chart;
       let xp = 0;
-      const labs = ["Pramuka", "Futsal", "Basket", "Musik", "Robotik"];
-      const clrs = ["#f472b6", "#6366f1", "#22d3ee", "#94a3b8", "#a855f7"];
+      const labs = ["Pramuka", "Futsal", "Basket", "Musik", "Teater"];
+
+      // Warna Identitas: Coklat (Sienna), Merah (Bright Red), Oranye, Ungu, Kuning Emas
+      const clrs = ["#8b4513", "#ff4136", "#ff851b", "#b10dc9", "#ffdc00"];
 
       function init() {
         const el = document.getElementById("labChart").getContext("2d");
@@ -727,19 +832,33 @@
                 data: [20, 45, 30, 25, 15],
                 backgroundColor: clrs,
                 borderRadius: 10,
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0.1)",
               },
             ],
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: "rgba(2, 6, 23, 0.9)",
+                titleFont: { family: "Plus Jakarta Sans", weight: "bold" },
+                bodyFont: { family: "Plus Jakarta Sans" },
+                padding: 12,
+                cornerRadius: 8,
+              },
+            },
             scales: {
               y: {
                 ticks: { color: "#94a3b8" },
                 grid: { color: "rgba(255,255,255,0.05)" },
               },
-              x: { ticks: { color: "#94a3b8" }, grid: { display: false } },
+              x: {
+                ticks: { color: "#94a3b8" },
+                grid: { display: false },
+              },
             },
           },
         });
@@ -764,6 +883,9 @@
         document.getElementById("tot-val").innerText = sum;
         document.getElementById("avg-val").innerText = mean.toFixed(1);
         document.getElementById("mod-val").innerText = mod;
+
+        // Re-render MathJax if content changes
+        if (window.MathJax) MathJax.typeset();
       }
 
       function changeChart(type) {
@@ -774,7 +896,15 @@
         document
           .getElementById("btn-pie")
           .classList.toggle("active", type === "pie");
+
         chart.config.options.plugins.legend.display = type === "pie";
+        if (type === "pie") {
+          chart.config.options.plugins.legend.labels = {
+            color: "#f8fafc",
+            font: { family: "Plus Jakarta Sans" },
+          };
+        }
+
         chart.update();
       }
 
@@ -785,10 +915,13 @@
 
       function check(q, status, btn) {
         const f = document.getElementById("fb" + q);
+        const exp = document.getElementById("exp" + q);
         const parent = btn.parentElement;
-        parent.querySelectorAll(".btn-choice").forEach((b) => {
-          b.classList.remove("correct", "wrong");
-        });
+
+        parent
+          .querySelectorAll(".btn-choice")
+          .forEach((b) => b.classList.remove("correct", "wrong"));
+        exp.style.display = "block";
 
         if (status === "benar") {
           f.innerHTML =
@@ -799,13 +932,14 @@
             particleCount: 120,
             spread: 80,
             origin: { y: 0.8 },
-            colors: ["#ff007a", "#6366f1", "#22d3ee"],
+            colors: ["#ff007a", "#6366f1", "#22d3ee", "#facc15"],
           });
         } else {
           f.innerHTML =
             "<span style='color: var(--neon-pink);'>SINKRONISASI GAGAL!</span>";
           btn.classList.add("wrong");
         }
+        if (window.MathJax) MathJax.typeset();
       }
 
       function addXp(v) {
