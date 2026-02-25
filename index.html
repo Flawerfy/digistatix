@@ -28,9 +28,10 @@
         --neon-pink: #ff007a;
         --neon-indigo: #6366f1;
         --neon-cyan: #22d3ee;
-        --bg-cosmic: #020617; /* Deep Space */
+        --bg-cosmic: #020617;
         --success: #10b981;
         --danger: #ef4444;
+        --warning: #facc15;
       }
 
       body {
@@ -57,7 +58,7 @@
         background: rgba(2, 6, 23, 0.9);
         backdrop-filter: blur(20px);
         border-bottom: 1px solid var(--neon-pink);
-        padding: 15px 0;
+        padding: 12px 0;
         z-index: 1000;
       }
       .author-brand {
@@ -131,7 +132,7 @@
         transform: scale(1.05);
       }
 
-      /* Tombol & Pilihan */
+      /* Buttons & Choices */
       .btn-mode {
         border-radius: 30px;
         font-weight: 700;
@@ -182,6 +183,15 @@
         padding: 15px;
         width: 100%;
         resize: none;
+      }
+
+      /* Box Instruksi Khusus */
+      .instruction-box {
+        background: rgba(34, 211, 238, 0.05);
+        border: 1px dashed var(--neon-cyan);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 20px;
       }
 
       .study-guide-box {
@@ -340,13 +350,25 @@
         </div>
       </div>
 
-      <!-- Simulator -->
+      <!-- Simulator dengan Instruksi Jelas -->
       <div class="row g-4 mb-4">
         <div class="col-lg-4">
           <div class="glass-card h-100">
             <h5 class="section-title" style="color: var(--neon-pink)">
               Input Simulator
             </h5>
+
+            <!-- BOX INSTRUKSI UNTUK SISWA -->
+            <div class="instruction-box">
+              <p class="small mb-0" style="color: var(--neon-cyan)">
+                <i class="fa-solid fa-circle-info me-1"></i> <b>Cara Bermain:</b
+                ><br />
+                Geser tombol (slider) di bawah untuk menambah/mengurangi jumlah
+                siswa setiap eskul. Perhatikan bagaimana grafik dan angka
+                statistik di samping berubah secara otomatis!
+              </p>
+            </div>
+
             <div class="mb-3">
               <label class="small d-flex justify-content-between"
                 >Pramuka
@@ -428,15 +450,15 @@
           <div class="glass-card h-100 text-center">
             <div class="row g-3 mb-5">
               <div class="col-4">
-                <small class="text-secondary d-block">TOTAL DATA</small>
+                <small class="text-secondary d-block">TOTAL SISWA</small>
                 <div class="stat-value" id="tot-val">0</div>
               </div>
               <div class="col-4">
-                <small class="text-secondary d-block">MEAN</small>
+                <small class="text-secondary d-block">MEAN (RATA-RATA)</small>
                 <div class="stat-value" id="avg-val">0</div>
               </div>
               <div class="col-4">
-                <small class="text-secondary d-block">MODUS</small>
+                <small class="text-secondary d-block">MODUS (TERBANYAK)</small>
                 <div class="stat-value" id="mod-val" style="font-size: 1.1rem">
                   -
                 </div>
@@ -478,7 +500,7 @@
               >QUEST 01</span
             >
             <p class="small">
-              Kategori data yang paling dominan (paling sering muncul)
+              Data atau kategori yang muncul paling sering dalam sebuah kelompok
               disebut...
             </p>
             <button class="btn-choice" onclick="check(1, 'benar', this)">
@@ -503,8 +525,8 @@
               >QUEST 02</span
             >
             <p class="small">
-              Jika satu lingkaran penuh memiliki total data 100, bagian yang
-              mewakili 25% memiliki sudut...
+              Dalam satu lingkaran penuh (360°), bagian yang mewakili 25% data
+              memiliki sudut sebesar...
             </p>
             <button class="btn-choice" onclick="check(2, 'salah', this)">
               A. 45 Derajat
@@ -516,7 +538,7 @@
               C. 180 Derajat
             </button>
             <button class="btn-choice" onclick="check(2, 'salah', this)">
-              D. 360 Derajat
+              D. 25 Derajat
             </button>
             <div id="fb2" class="small mt-2"></div>
           </div>
@@ -528,8 +550,8 @@
               >QUEST 03</span
             >
             <p class="small">
-              Data nilai: 70, 80, 90. Berapakah rata-rata (Mean) dari data
-              tersebut?
+              Diberikan data nilai: 70, 80, 90. Berapakah nilai rata-rata (Mean)
+              dari data tersebut?
             </p>
             <button class="btn-choice" onclick="check(3, 'salah', this)">
               A. 70
@@ -553,8 +575,8 @@
               >QUEST 04</span
             >
             <p class="small">
-              Diagram yang paling tepat untuk menunjukkan perbandingan jumlah
-              antar kategori adalah...
+              Visualisasi yang paling tepat untuk membandingkan jumlah frekuensi
+              antar eskul secara langsung adalah...
             </p>
             <button class="btn-choice" onclick="check(4, 'salah', this)">
               A. Diagram Garis
@@ -578,19 +600,20 @@
               >QUEST 05</span
             >
             <p class="small">
-              Langkah pertama yang benar untuk menentukan Median adalah...
+              Langkah utama yang wajib dilakukan sebelum menentukan nilai Median
+              adalah...
             </p>
             <button class="btn-choice" onclick="check(5, 'benar', this)">
-              A. Mengurutkan data
+              A. Mengurutkan data (Kecil ke Besar)
             </button>
             <button class="btn-choice" onclick="check(5, 'salah', this)">
-              B. Menjumlahkan data
+              B. Menjumlahkan seluruh data
             </button>
             <button class="btn-choice" onclick="check(5, 'salah', this)">
-              C. Mencari modus
+              C. Mencari modus data
             </button>
             <button class="btn-choice" onclick="check(5, 'salah', this)">
-              D. Membagi data dua
+              D. Membagi data menjadi 4 bagian
             </button>
             <div id="fb5" class="small mt-2"></div>
           </div>
@@ -602,20 +625,20 @@
               >QUEST 06</span
             >
             <p class="small">
-              Jika total frekuensi adalah 40 dan banyak kategori ada 5,
-              berapakah rata-rata frekuensinya?
+              Jika total frekuensi dari 5 eskul adalah 50 siswa, berapakah
+              rata-rata (Mean) jumlah siswa per eskul?
             </p>
             <button class="btn-choice" onclick="check(6, 'salah', this)">
-              A. 5
+              A. 5 Siswa
             </button>
             <button class="btn-choice" onclick="check(6, 'benar', this)">
-              B. 8
+              B. 10 Siswa
             </button>
             <button class="btn-choice" onclick="check(6, 'salah', this)">
-              C. 10
+              C. 15 Siswa
             </button>
             <button class="btn-choice" onclick="check(6, 'salah', this)">
-              D. 12
+              D. 25 Siswa
             </button>
             <div id="fb6" class="small mt-2"></div>
           </div>
@@ -630,25 +653,27 @@
         <div class="mb-4">
           <p class="small fw-bold">1. Analisis Visual:</p>
           <p class="small text-secondary">
-            Jika diagram batang eskul Robotik jauh lebih tinggi dari yang lain,
-            apa kesimpulanmu tentang Modus data tersebut?
+            Tanpa melihat angka, jika potongan (juring) eskul Musik pada diagram
+            lingkaran terlihat paling lebar, apa kesimpulanmu tentang Modus data
+            tersebut? Jelaskan alasannya!
           </p>
           <textarea
             class="essay-area"
             rows="2"
-            placeholder="Ketik analisismu..."
+            placeholder="Tulis analisismu di sini..."
           ></textarea>
         </div>
         <div>
           <p class="small fw-bold">2. Penalaran Rata-rata:</p>
           <p class="small text-secondary">
-            Mungkinkah nilai rata-rata kelas adalah 80, tapi ada siswa yang
-            mendapat nilai 10? Jelaskan alasannya!
+            Jika guru menyebutkan rata-rata nilai kelas adalah 80, apakah itu
+            berarti tidak ada siswa yang mendapatkan nilai di bawah 50? Berikan
+            argumenmu!
           </p>
           <textarea
             class="essay-area"
             rows="2"
-            placeholder="Ketik alasanmu..."
+            placeholder="Tulis argumenmu di sini..."
           ></textarea>
         </div>
       </div>
@@ -663,22 +688,21 @@
             <ul class="small">
               <li>
                 <b>Diagram Batang:</b> Digunakan untuk membandingkan jumlah
-                secara langsung.
+                secara visual.
               </li>
               <li>
-                <b>Mean:</b> Mewakili nilai rata-rata keseluruhan kelompok.
+                <b>Mean:</b> Angka yang mewakili rata-rata keseluruhan kelompok.
               </li>
             </ul>
           </div>
           <div class="col-md-6">
             <ul class="small">
               <li>
-                <b>Median:</b> Sangat berguna jika terdapat nilai ekstrem dalam
-                data.
+                <b>Median:</b> Penyelamat jika data memiliki nilai yang terlalu
+                ekstrem.
               </li>
               <li>
-                <b>Modus:</b> Menunjukkan data yang paling populer atau tren
-                saat ini.
+                <b>Modus:</b> Menunjukkan apa yang paling populer dalam data.
               </li>
             </ul>
           </div>
@@ -761,7 +785,6 @@
 
       function check(q, status, btn) {
         const f = document.getElementById("fb" + q);
-        // Bersihkan gaya dari tombol lain di soal yang sama
         const parent = btn.parentElement;
         parent.querySelectorAll(".btn-choice").forEach((b) => {
           b.classList.remove("correct", "wrong");
@@ -773,8 +796,8 @@
           btn.classList.add("correct");
           addXp(20);
           confetti({
-            particleCount: 100,
-            spread: 70,
+            particleCount: 120,
+            spread: 80,
             origin: { y: 0.8 },
             colors: ["#ff007a", "#6366f1", "#22d3ee"],
           });
@@ -787,7 +810,7 @@
 
       function addXp(v) {
         xp += v;
-        if (xp > 200) xp = 200; // XP ditingkatkan karena soal bertambah
+        if (xp > 200) xp = 200;
         document.getElementById("xp-txt").innerText = xp + " XP";
         document.getElementById("xp-bar").style.width = xp / 2 + "%";
       }
