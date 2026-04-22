@@ -337,26 +337,31 @@
       }
 
       .challenge-box {
-        background: #fffbeb;
-        border: 1px dashed var(--warning);
-        padding: 20px;
+        background: #f0f9ff;
+        border: 2px dashed var(--accent);
+        padding: 25px;
         border-radius: 15px;
+        margin-top: 25px;
       }
       .mini-btn {
         background: #ffffff;
         border: 1px solid #cbd5e1;
         color: var(--text-main);
-        padding: 8px 20px;
+        padding: 10px 20px;
         border-radius: 10px;
         margin-right: 10px;
-        margin-top: 10px;
+        margin-bottom: 10px;
         cursor: pointer;
-        font-weight: 700;
+        font-weight: 600;
         transition: 0.2s;
       }
-      .mini-btn:hover {
-        border-color: var(--primary);
-        color: var(--primary);
+      .mini-btn:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: #e0f2fe;
+      }
+      .mini-btn:disabled {
+        cursor: default;
       }
 
       /* --- BUBBLE RANGKUMAN --- */
@@ -825,13 +830,13 @@
                 class="tab-btn active"
                 onclick="loadConcept(this, 'mean')"
               >
-                Konsep Mean
+                Mean (Nilai Rata-rata)
               </button>
               <button class="tab-btn" onclick="loadConcept(this, 'median')">
-                Konsep Median
+                Median (Nilai Tengah)
               </button>
               <button class="tab-btn" onclick="loadConcept(this, 'modus')">
-                Konsep Modus
+                Modus (Data Dominan)
               </button>
               <button class="tab-btn" onclick="loadConcept(this, 'batang')">
                 Diagram Batang
@@ -1094,82 +1099,103 @@
       // --- DATA EKSPLORASI ---
       const conceptData = {
         mean: {
-          title: "Mean: Nilai Rata-rata ($\\bar{x}$)",
-          desc: "Mean didapatkan dengan menjumlahkan seluruh nilai data ($\\sum x$) lalu membaginya dengan jumlah total data ($n$). Cocok untuk data seragam.",
-          formula: "$$\\bar{x} = \\frac{\\sum x}{n}$$",
+          title: "Mean (Nilai Rata-rata) $\\bar{x}$",
+          desc: "Mean adalah nilai rata-rata dari keseluruhan data. Dalam statistika, mean dihitung dengan membagi jumlah seluruh nilai data dengan banyaknya data. Mean memberikan gambaran pusat penyebaran data.",
+          formula:
+            "$$\\bar{x} = \\frac{\\text{Jumlah seluruh nilai data}}{\\text{Banyaknya data}} = \\frac{\\sum x_i}{n}$$",
           example:
-            "Nilai ujian: 80, 90, 85, 75. Rata-rata = $(80+90+85+75) \\div 4 = 82.5$",
+            "Diberikan data nilai ujian matematika 7 orang siswa: 78, 80, 90, 77, 60, 75, dan 44. Maka nilai rata-rata (Mean) adalah $(78+80+90+77+60+75+44) \\div 7 = 504 \\div 7 = 72$.",
+          stepTitle:
+            "Untuk menentukan nilai Mean, ikuti langkah-langkah berikut:",
           steps: [
-            "Kumpulkan semua angka data",
-            "Jumlahkan semuanya",
-            "Hitung banyak data",
-            "Bagi jumlah total dengan banyak data",
+            "Kumpulkan seluruh observasi nilai data ($x_i$)",
+            "Hitung jumlah seluruh nilai data tersebut ($\\sum x$)",
+            "Tentukan banyaknya data yang ada ($n$)",
+            "Bagi jumlah total nilai ($\\sum x$) dengan banyaknya data ($n$)",
           ],
-          q: "Jika data: 5, 5, 10, 10. Berapa Mean-nya?",
-          ans: "7.5",
-          opts: ["5", "7.5", "10"],
+          q: "Diberikan data: 60, 65, 70, 75, 80, 85, dan 90. Berapakah nilai rata-ratanya?",
+          ans: "75",
+          opts: ["70", "75", "80"],
+          exp: "Total nilai data adalah $60+65+70+75+80+85+90 = 525$. Karena ada 7 buah data, maka rata-ratanya adalah $525 \\div 7 = 75$.",
           chartType: null,
         },
         median: {
-          title: "Median: Nilai Tengah ($Me$)",
-          desc: "Median adalah nilai pengamatan yang membagi data menjadi dua bagian sama besar setelah data diurutkan. Tangguh terhadap data outlier.",
-          formula: "$$Me = \\text{Titik Tengah Posisi}$$",
+          title: "Median (Nilai Tengah) $Me$",
+          desc: "Median adalah nilai data yang membagi keseluruhan data menjadi dua bagian yang sama banyak setelah data tersebut diurutkan dari nilai terkecil hingga terbesar.",
+          formula: "$$Me = \\text{Nilai data yang terletak tepat di tengah}$$",
           example:
-            "Data: 10, 5, 8 $\\to$ Diurutkan: 5, <b>8</b>, 10. Median = 8.",
+            "Diberikan 7 data acak: 80, 75, 90, 60, 77, 48, dan 85. Pertama-tama data diurutkan menjadi 48, 60, 75, <b>77</b>, 80, 85, 90. Maka nilai tengah (Median) dari data tersebut adalah 77.",
+          stepTitle:
+            "Untuk menentukan nilai Median, ikuti langkah-langkah berikut:",
           steps: [
-            "Urutkan data dari terkecil ke terbesar",
-            "Cari posisi tengah: $(n+1)/2$",
-            "Jika genap: Hitung rata-rata dua angka tengah",
+            "Wajib: Urutkan data dari nilai terkecil hingga terbesar",
+            "Hitung banyaknya data ($n$)",
+            "Jika $n$ ganjil: Median adalah data ke-$\\frac{n+1}{2}$",
+            "Jika $n$ genap: Median adalah rata-rata dari data ke-$\\frac{n}{2}$ dan data ke-$(\\frac{n}{2} + 1)$",
           ],
-          q: "Urutan data: 2, 5, 8. Berapa Median-nya?",
-          ans: "5",
-          opts: ["2", "5", "8"],
+          q: "Terdapat data observasi: 65, 70, 60, 85, 80, 75, dan 90. Berapakah nilai Median-nya?",
+          ans: "75",
+          opts: ["70", "75", "80"],
+          exp: "Syarat menghitung median adalah data wajib diurutkan menjadi (60, 65, 70, 75, 80, 85, 90). Nilai yang berada persis di posisi ke-4 (tengah) adalah 75.",
           chartType: null,
         },
         modus: {
-          title: "Modus: Data Dominan ($Mo$)",
-          desc: "Nilai atau kategori yang frekuensi kemunculannya paling tinggi atau paling sering muncul dalam kelompok.",
-          formula: "$$Mo = \\text{Data Terpopuler}$$",
-          example: "Data: Merah, Putih, Merah, Hitam. Modus = <b>Merah</b>.",
+          title: "Modus (Data Dominan) $Mo$",
+          desc: "Modus adalah data yang paling sering muncul atau memiliki frekuensi tertinggi dalam suatu kumpulan pengamatan. Sekumpulan data dapat memiliki satu modus, lebih dari satu modus, atau tidak memiliki modus sama sekali.",
+          formula: "$$Mo = \\text{Data dengan frekuensi tertinggi}$$",
+          example:
+            "Diberikan data nilai ulangan 7 siswa: 75, 80, 75, 90, 85, 75, dan 80. Maka modus dari data tersebut adalah <b>75</b> karena muncul paling banyak (sebanyak 3 kali).",
+          stepTitle:
+            "Untuk menentukan nilai Modus, ikuti langkah-langkah berikut:",
           steps: [
-            "Daftar kemunculan tiap data",
-            "Pilih data dengan frekuensi paling besar",
+            "Buatlah daftar frekuensi (banyaknya kemunculan) dari masing-masing nilai data",
+            "Bandingkan frekuensi dari setiap nilai",
+            "Pilih data yang memiliki frekuensi paling besar sebagai Modus ($Mo$)",
           ],
-          q: "Data: Musik, Musik, Teater, Futsal. Mana Modus?",
-          ans: "Musik",
-          opts: ["Musik", "Teater", "Futsal"],
+          q: "Diberikan data nilai harian: 80, 70, 90, 80, 85, 80, dan 75. Manakah yang menjadi Modus?",
+          ans: "80",
+          opts: ["75", "80", "85"],
+          exp: "Nilai '80' muncul sebanyak 3 kali, sementara nilai lainnya hanya muncul 1 atau 2 kali. Maka 80 adalah data dengan frekuensi tertinggi.",
           chartType: null,
         },
         batang: {
-          title: "Penyajian: Diagram Batang",
-          desc: "Diagram batang menggunakan persegi panjang untuk menunjukkan jumlah (frekuensi). Sangat baik untuk perbandingan kuantitas.",
+          title: "Penyajian Data <br> Diagram Batang",
+          desc: "Diagram batang adalah bentuk penyajian visual yang menggunakan batang-batang berbentuk persegi panjang yang digambar sejajar. Sangat efektif digunakan untuk membandingkan kuantitas (frekuensi) antar kategori.",
           formula:
-            "Tinggi Batang secara proporsional berbanding lurus dengan Frekuensi.",
-          example: "Digunakan untuk membandingkan jumlah siswa di tiap eskul.",
+            "$$\\text{Tinggi Batang} \\propto \\text{Frekuensi Kategori}$$",
+          example:
+            "Misalnya kita mencatat pilihan eskul 7 siswa: Pramuka, Futsal, Basket, Futsal, Musik, Futsal, dan Pramuka. Diagram batang akan memperlihatkan batang Futsal paling tinggi karena frekuensinya terbesar (3 siswa).",
+          stepTitle:
+            "Untuk menyajikan Diagram Batang, ikuti langkah-langkah berikut:",
           steps: [
-            "Buat sumbu mendatar (kategori) & tegak (skala)",
-            "Gambarkan batang setinggi frekuensinya",
+            "Buatlah sumbu mendatar (Sumbu $X$) untuk meletakkan nama-nama kategori",
+            "Buatlah sumbu tegak (Sumbu $Y$) yang berisi skala frekuensi dengan interval yang sama",
+            "Gambarkan batang untuk setiap kategori dengan tinggi sesuai frekuensinya di sumbu $Y$",
           ],
-          q: "Diagram batang cocok untuk melihat...",
+          q: "Berdasarkan fungsinya, diagram batang sangat cocok digunakan untuk melihat...",
           ans: "Perbandingan",
           opts: ["Waktu", "Perbandingan", "Suhu"],
+          exp: "Diagram batang menyajikan perbedaan tinggi/panjang kotak secara visual, sehingga sangat mudah dan akurat untuk membandingkan kuantitas (jumlah) antar kategori.",
           chartType: "bar",
         },
         lingkaran: {
-          title: "Penyajian: Diagram Lingkaran",
-          desc: "Membagi lingkaran menjadi juring untuk menunjukkan proporsi bagian terhadap keseluruhan ($100\\%$ atau $360^{\\circ}$).",
+          title: "Penyajian Data <br> Diagram Lingkaran",
+          desc: "Diagram lingkaran menyajikan data menggunakan daerah lingkaran yang dibagi menjadi juring-juring. Diagram ini digunakan untuk menunjukkan perbandingan (proporsi) suatu bagian terhadap keseluruhan populasi.",
           formula:
-            "$$\\text{Sudut Juring} = \\frac{\\text{Data}}{\\text{Total}} \\times 360^{\\circ}$$",
+            "$$\\text{Sudut Juring} = \\frac{\\text{Frekuensi Kategori}}{\\text{Total Frekuensi}} \\times 360^{\\circ}$$",
           example:
-            "Total 40 siswa. Yang suka futsal 10 siswa. Sudut = $(10/40) \\times 360^{\\circ} = 90^{\\circ}$.",
+            "Dari total 70 siswa di kelas, terdapat 14 siswa yang menyukai Futsal. Maka besar sudut juring untuk Futsal pada diagram lingkaran adalah $(14/70) \\times 360^{\\circ} = 72^{\\circ}$.",
+          stepTitle:
+            "Untuk menyajikan Diagram Lingkaran, ikuti langkah-langkah berikut:",
           steps: [
-            "Hitung total seluruh populasi data",
-            "Hitung persentase / sudut untuk tiap kategori",
-            "Gambarkan luas juring",
+            "Hitung jumlah total keseluruhan frekuensi data",
+            "Hitung besar persentase atau sudut juring tiap kategori menggunakan rumus di atas",
+            "Gambarkan juring pada lingkaran menggunakan bantuan busur derajat",
           ],
-          q: "Satu lingkaran penuh sama dengan berapa derajat?",
+          q: "Satu putaran lingkaran penuh secara matematis memiliki sudut sebesar...",
           ans: "360°",
           opts: ["180°", "270°", "360°"],
+          exp: "Sebuah lingkaran utuh (penuh) yang mewakili 100% total keseluruhan data secara geometris memiliki sudut sebesar $360^{\\circ}$.",
           chartType: "pie",
         },
       };
@@ -1183,16 +1209,16 @@
           exp: "<b>Penjelasan:</b> Modus adalah nilai atau kategori yang memiliki frekuensi tertinggi (paling sering muncul). Pilihan lain seperti Mean adalah rata-rata, Median adalah nilai tengah, dan Range adalah selisih nilai terbesar dan terkecil.",
         },
         {
-          q: "Mean dari 70, 80, 90 adalah...",
+          q: "Mean dari data 60, 70, 80, 75, 85, 90, dan 100 adalah...",
           opt: ["75", "80", "85", "90"],
           ans: 1,
-          exp: "<b>Penjelasan Lengkap:</b><br><ol><li>Jumlahkan semua nilai: $70 + 80 + 90 = 240$</li><li>Bagi dengan banyaknya data ($n = 3$)</li><li>Hasilnya: $240 \\div 3 = 80$.</li></ol>",
+          exp: "<b>Penjelasan Lengkap:</b><br><ol><li>Jumlahkan semua nilai: $60+70+80+75+85+90+100 = 560$</li><li>Bagi dengan banyaknya data ($n = 7$)</li><li>Hasilnya: $560 \\div 7 = 80$.</li></ol>",
         },
         {
-          q: "Untuk mencari Median, data harus...",
-          opt: ["Dijumlahkan", "Diurutkan", "Dikali", "Dibagi"],
+          q: "Berapakah Median dari data nilai berikut: 80, 65, 75, 90, 85, 70, dan 95?",
+          opt: ["75", "80", "85", "90"],
           ans: 1,
-          exp: "<b>Syarat Penting:</b> Syarat utama mencari Median (Nilai Tengah) adalah data <b>wajib diurutkan</b> dari nilai terkecil hingga terbesar. Jika tidak diurutkan, nilai yang berada di tengah belum tentu mewakili pusat data yang sebenarnya.",
+          exp: "<b>Langkah Penyelesaian:</b><br>1. Urutkan data dari terkecil: 65, 70, 75, <b>80</b>, 85, 90, 95.<br>2. Karena ada 7 data (ganjil), nilai yang berada tepat di posisi ke-4 (tengah) adalah 80.",
         },
         {
           q: "Diagram lingkaran penuh memiliki besar sudut...",
@@ -1216,7 +1242,7 @@
           q: "Apa arti dari 'Frekuensi' dalam tabel statistik?",
           opt: ["Urutan", "Rata-rata", "Jumlah Muncul", "Selisih"],
           ans: 2,
-          exp: "<b>Penjelasan:</b> Dalam statistika, frekuensi menunjukkan seberapa banyak atau seberapa sering suatu kategori/nilai tersebut muncul. Misalnya, jika ada 5 siswa yang suka futsal, maka frekuensi kelompok Futsal adalah 5.",
+          exp: "<b>Penjelasan:</b> Dalam statistika, frekuensi menunjukkan seberapa banyak atau seberapa sering suatu kategori/nilai tersebut muncul. Misalnya, jika ada 7 siswa yang suka futsal, maka frekuensi kelompok Futsal adalah 7.",
         },
         {
           q: "Diagram garis sangat cocok untuk menyajikan data...",
@@ -1225,10 +1251,10 @@
           exp: "<b>Penjelasan:</b> Diagram garis menghubungkan titik-titik data, sehingga sangat ideal untuk memperlihatkan <b>tren perkembangan</b> dari waktu ke waktu, seperti suhu harian atau pertumbuhan tinggi badan setiap bulannya.",
         },
         {
-          q: "Jika suatu data memiliki 2 modus, data tersebut disebut...",
-          opt: ["Unimodus", "Bimodus", "Multimodus", "Amodus"],
-          ans: 1,
-          exp: "<b>Penjelasan Istilah:</b> 'Bi-' berarti dua. Jadi, Bimodus adalah kondisi statistik di mana terdapat dua nilai atau kategori yang memiliki jumlah kemunculan tertinggi (frekuensi maksimal) yang persis sama.",
+          q: "Diketahui nilai ujian 7 siswa adalah: 85, 70, 90, 85, 80, 75, 85. Berapakah modusnya?",
+          opt: ["75", "80", "85", "90"],
+          ans: 2,
+          exp: "<b>Penjelasan:</b> Modus adalah nilai yang paling sering muncul. Dari sekumpulan data tersebut, nilai 85 muncul sebanyak 3 kali (frekuensi tertinggi) dibandingkan nilai lainnya.",
         },
         {
           q: "Dari total 40 siswa, peminat Basket 10%. Berapa jumlahnya?",
@@ -1329,15 +1355,22 @@
                         <p class="mt-3 text-muted" style="line-height:1.7;">${d.desc}</p>
                         <div class="formula-box">${d.formula}</div>
                         <div class="p-3 mb-4 rounded-3" style="background: #e0e7ff; border-left: 4px solid var(--primary);">
-                            <span class="fw-bold" style="color: var(--primary);">Contoh:</span> <span class="small text-dark">${d.example}</span>
+                            <div class="fw-bold mb-1" style="color: var(--primary);">Contoh:</div>
+                            <div class="small text-dark" style="line-height: 1.6;">${d.example}</div>
                         </div>
-                        <h6 class="fw-bold text-dark mt-4">Langkah Analisis:</h6>
+                        <h6 class="fw-bold text-dark mt-4">${d.stepTitle}</h6>
                         ${d.steps.map((s, i) => `<div class="step-item"><div class="step-num">${i + 1}</div><div class="small text-muted fw-bold mt-1">${s}</div></div>`).join("")}
                     </div>
                     ${visualBox}
                 </div>
-                <div class="challenge-box"><p class="small text-dark fw-bold mb-2">🚀 Tantangan Cepat: ${d.q}</p>
-                ${d.opts.map((o) => `<button class="mini-btn" onclick="checkMini('${o}'=='${d.ans}', this)">${o}</button>`).join("")}</div>
+                <div class="challenge-box">
+                    <div class="fw-bold mb-2" style="color: var(--accent); font-size: 1.1rem;"><i class="fa-solid fa-rocket me-2"></i> Tantangan Cepat</div>
+                    <div class="text-dark mb-3 fw-semibold">${d.q}</div>
+                    <div class="d-flex flex-wrap">
+                        ${d.opts.map((o) => `<button class="mini-btn" onclick="checkMini('${o}'=='${d.ans}', '${key}', this)">${o}</button>`).join("")}
+                    </div>
+                    <div id="mini-feedback" class="feedback-box mt-3" style="background: #ffffff; border-left: 4px solid var(--accent); display: none;"></div>
+                </div>
             `;
 
         if (window.MathJax) MathJax.typesetPromise();
@@ -1374,17 +1407,43 @@
         }
       }
 
-      function checkMini(isCorrect, btn) {
+      function checkMini(isCorrect, key, btn) {
+        const parentBox = btn.closest(".challenge-box");
+        const buttons = parentBox.querySelectorAll(".mini-btn");
+        const feedbackBox = parentBox.querySelector("#mini-feedback");
+        const conceptExp = conceptData[key].exp;
+
+        // Nonaktifkan semua tombol setelah diklik
+        buttons.forEach((b) => (b.disabled = true));
+
+        let feedbackContent = "";
+
         if (isCorrect) {
           btn.style.background = "#d1fae5";
           btn.style.color = "#065f46";
           btn.style.borderColor = "#10b981";
+          feedbackContent = `<span class="fw-bold text-success d-block mb-1"><i class="fa-solid fa-circle-check me-1"></i> Jawaban Benar!</span><span class="small text-muted">${conceptExp}</span>`;
           confetti({ particleCount: 35, spread: 40 });
         } else {
           btn.style.background = "#fee2e2";
           btn.style.color = "#991b1b";
           btn.style.borderColor = "#ef4444";
+
+          // Sorot tombol yang jawabannya benar dengan warna hijau muda
+          buttons.forEach((b) => {
+            if (b.innerText === conceptData[key].ans) {
+              b.style.background = "#f0fdf4";
+              b.style.borderColor = "#34d399";
+              b.style.color = "#065f46";
+            }
+          });
+
+          feedbackContent = `<span class="fw-bold text-danger d-block mb-1"><i class="fa-solid fa-circle-xmark me-1"></i> Jawaban Kurang Tepat!</span><span class="small text-muted">${conceptExp}</span>`;
         }
+
+        feedbackBox.innerHTML = feedbackContent;
+        feedbackBox.style.display = "block";
+        if (window.MathJax) MathJax.typesetPromise([feedbackBox]);
       }
 
       function init() {
